@@ -1,0 +1,53 @@
+# Byte-compiled / compiled Python files
+*.pyc
+*.pyo
+__pycache__/
+
+# Python virtual environments
+env/
+venv/
+*.venv/
+
+# Distribution / packaging
+dist/
+build/
+*.egg-info/
+
+# Node modules
+node_modules/
+
+# Serverless deployment artifacts
+.serverless/
+.sls-artifacts/
+
+# AWS-specific files (optional, if generated locally)
+.aws-sam/
+.local/
+
+# Logs and debugging
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+debug.log
+*.log
+
+# Operating system files
+.DS_Store
+Thumbs.db
+
+# IDEs and editors
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Docker files
+docker-compose.override.yml
+.dockerignore
+*.env
+*.env.local
+
+# Miscellaneous
+*.bak
+*.tmp
+*.out

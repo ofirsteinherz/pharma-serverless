@@ -1,0 +1,20 @@
+services:
+  serverless:
+    platform: linux/arm64
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - .:/app
+    # env_file:
+      # - .env.docker  # Changed this from environment to env_file
+    environment:
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+      - AWS_DEFAULT_REGION=${AWS_DEFAULT_REGION:-us-east-1}
+      - SERVERLESS_ACCESS_KEY=${SERVERLESS_ACCESS_KEY}
+    ports:
+      - "3000:3000"
+    working_dir: /app
+    tty: true
+    stdin_open: true

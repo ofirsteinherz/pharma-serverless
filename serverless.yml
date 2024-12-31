@@ -1,0 +1,83 @@
+service: disease-analyzer-api
+frameworkVersion: '4'
+
+provider:
+  name: aws
+  runtime: python3.11
+  region: us-east-1
+  architecture: arm64
+  timeout: 29
+  memorySize: 256
+  environment:
+    OPENAI_API_KEY: ${env:OPENAI_API_KEY}
+    PINECONE_API_KEY: ${env:PINECONE_API_KEY}
+    PINECONE_INDEX_NAME: ${env:PINECONE_INDEX_NAME}
+  apiGateway:
+    apiKeys:
+      - name: disease-analyzer-api-key
+    usagePlan:
+      quota:
+        limit: 1000
+        period: MONTH
+      throttle:
+        burstLimit: 10
+        rateLimit: 2
+
+package:
+  individually: true
+  patterns:
+    - '!**/*'
+    - handler.py
+    - '.env'
+    - 'requirements.txt'
+    - '!.env'  # Explicitly exclude .env file
+
+functions:
+  analyze:
+    handler: handler.handler
+    layers:
+      - !Ref PythonRequirementsLambdaLayer
+    events:
+      - http:
+          path: analyze
+          method: post
+          private: true
+          cors: true
+          request:
+            schemas:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    disease_name:
+                      type: string
+                    num_questions:
+                      type: number
+                    max_workers:
+                      type: number
+                  required:
+                    - disease_name
+
+custom:
+  dotenv:
+    exclude:
+      - AWS_ACCESS_KEY_ID
+      - AWS_SECRET_ACCESS_KEY
+      - AWS_DEFAULT_REGION
+      - AWS_PROFILE
+      - AWS_REGION
+      - SERVERLESS_ACCESS_KEY
+  pythonRequirements:
+    layer:
+      name: disease-analyzer-dependencies
+    dockerizePip: false
+    pythonBin: python3.11
+    noDeploy:
+      - pytest
+      - pytest-*
+      - boto3
+      - botocore
+
+plugins:
+  - serverless-python-requirements
+  - serverless-dotenv-plugin
