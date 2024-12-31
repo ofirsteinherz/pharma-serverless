@@ -18,4 +18,9 @@ if [ ! -z "$SERVERLESS_ACCESS_KEY" ]; then
 EOF
 fi
 
+# Configure Supabase
+if [ ! -z "$SUPABASE_ACCESS_TOKEN" ]; then
+    supabase login --access-token $SUPABASE_ACCESS_TOKEN
+fi
+
 exec "$@"

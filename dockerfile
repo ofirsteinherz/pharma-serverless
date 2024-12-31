@@ -22,6 +22,8 @@ RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-aarch64.zip" -o "awscliv
 # Install Serverless Framework and plugins
 RUN npm install -g serverless
 RUN npm install -g serverless-dotenv-plugin
+RUN curl -L "https://github.com/supabase/cli/releases/latest/download/supabase_linux_arm64.tar.gz" \
+    | tar xz -C /usr/local/bin
 
 # Set working directory and permissions
 WORKDIR /app
