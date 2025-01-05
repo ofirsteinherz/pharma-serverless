@@ -1,3 +1,4 @@
+org: ofirst
 service: disease-analyzer-api
 frameworkVersion: '4'
 
@@ -22,6 +23,9 @@ provider:
       throttle:
         burstLimit: 10
         rateLimit: 2
+  deploymentBucket:
+    maxPreviousDeploymentArtifacts: 1  # Limit old deployments
+  deploymentMethod: direct             # Use direct deployments
 
 package:
   individually: true
@@ -30,7 +34,6 @@ package:
     - handler.py
     - '.env'
     - 'requirements.txt'
-    - '!.env'  # Explicitly exclude .env file
 
 functions:
   analyze:
@@ -78,6 +81,8 @@ custom:
       - pytest-*
       - boto3
       - botocore
+    zip: true
+    slim: true
 
 plugins:
   - serverless-python-requirements
